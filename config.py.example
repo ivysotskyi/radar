@@ -1,0 +1,4 @@
+TOKEN = "your-token"
+PORT = 8443
+HEROKU_APP_NAME = "secret-hollows-XXXXX"
+MODE = "prod"
