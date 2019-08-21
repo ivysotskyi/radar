@@ -10,15 +10,15 @@ logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger()
 
-if MODE == "dev":
+if config.MODE == "dev":
     def run(updater):
         updater.start_polling()
-elif MODE == "prod":
+elif config.MODE == "prod":
     def run(updater):
         updater.start_webhook(listen="0.0.0.0",
-                              port=PORT,
-                              url_path=TOKEN)
-        updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(HEROKU_APP_NAME, TOKEN))
+                              port=config.PORT,
+                              url_path=config.TOKEN)
+        updater.bot.set_webhook("https://{}.herokuapp.com/{}".format(config.HEROKU_APP_NAME, config.TOKEN))
 else:
     logger.error("No MODE specified!")
     sys.exit(1)
@@ -37,7 +37,7 @@ def random_handler(bot, update):
 
 if __name__ == '__main__':
     logger.info("Starting bot")
-    updater = Updater(TOKEN)
+    updater = Updater(config.TOKEN)
 
     updater.dispatcher.add_handler(CommandHandler("start", start_handler))
     updater.dispatcher.add_handler(CommandHandler("random", random_handler))
