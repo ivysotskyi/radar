@@ -1,1 +1,1 @@
-web: python bin/radar/first_file.py
+web: python first_file.py
