@@ -3,10 +3,7 @@ import os
 import random
 import sys
 import config
-TOKEN = "850021816:AAHInb2PNTBiN1M15yEtkos9L4ESdfrDrWI"
-PORT = 8443
-HEROKU_APP_NAME = "secret-hollows-35161"
-MODE = "dev"
+
 from telegram.ext import Updater, CommandHandler
 
 logging.basicConfig(level=logging.INFO,
