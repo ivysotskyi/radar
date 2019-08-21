@@ -1,1 +1,1 @@
-web: python first_file.py
+web: python bot.py
