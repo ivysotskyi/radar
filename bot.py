@@ -7,8 +7,8 @@ import radarcheck
 from PIL import Image
 import cv2
 from time import sleep
-
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ChatAction
+from telegram import ChatAction
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
