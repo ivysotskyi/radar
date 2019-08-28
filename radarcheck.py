@@ -25,20 +25,25 @@ def UrlToImage(url):
 def CropImage(img, rect):
     return img[rect.y:rect.y+rect.h, rect.x:rect.x+rect.w]
 
+
+def RecognizeNumberStr(img):
+    return image_to_string(img, lang='eng', config='--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789HO')
+
+
 def GetWindDirection(radar_img):
     rect = ImageRectangle(578, 87, 60, 13)
     cropped_img = CropImage(radar_img, rect)
-    recognized_str = image_to_string(cropped_img, lang='eng', config='--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789HO')
+    recognized_str = RecognizeNumberStr(cropped_img)
     if(recognized_str == "HO" or recognized_str == "" ):
         return "Wind direction is undefined."
     else:
-        return "Wind direction is {} degrees (to north direction) .".format(recognized_str)
+        return "Wind direction is {} degrees (from north direction) .".format(recognized_str)
 
 def GetWindSpeed(radar_img):
     rect = ImageRectangle(585, 101, 50, 13)
     cropped_img = CropImage(radar_img, rect)
 
-    recognized_str = image_to_string(cropped_img, lang='eng', config='--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789HO')
+    recognized_str = RecognizeNumberStr(cropped_img)
     if(recognized_str == "HO" or recognized_str == "" ):
         return "Wind speed is undefined."
     else:

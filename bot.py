@@ -1,11 +1,13 @@
 import logging
 import random
 import sys
+import os
 import config
 import radarcheck
 from PIL import Image
+import cv2
 
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -41,7 +43,13 @@ def wind_direction_handler(bot, update):
     wind_dir = radarcheck.GetWindDirection(image)
     logger.info("User {} wind direction {}".format(update.effective_user["id"], wind_dir))
     update.message.reply_text(wind_dir);
-    update.message.reply_photo(photo=radarcheck.radar_image_url)
+    #update.message.reply_photo(photo=radarcheck.radar_image_url)
+
+
+def photo_handler(bot, update):
+    url = update.message.photo[-1].get_file().file_path
+    img = radarcheck.UrlToImage(url)
+    update.message.reply_text("{}\n\n{}".format(radarcheck.GetWindDirection(img), radarcheck.GetWindSpeed(img)))
 
 if __name__ == '__main__':
     logger.info("Starting bot")
@@ -50,5 +58,6 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler("wind_direction", wind_direction_handler))
     updater.dispatcher.add_handler(CommandHandler("start", start_handler))
     updater.dispatcher.add_handler(CommandHandler("random", random_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.photo, photo_handler))
 
     run(updater)
