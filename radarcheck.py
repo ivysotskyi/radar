@@ -31,9 +31,9 @@ def RecognizeNumberStr(img):
 
 
 def RecognizedNumberUndefined(recognized_str):
-    if(recognized_str == "" or 'H' in recognized_str):
-        return true
-    return false
+    if(recognized_str == "" or ('H' in recognized_str)):
+        return True
+    return False
 
 
 def GetWindDirection(radar_img):
