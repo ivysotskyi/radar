@@ -16,21 +16,35 @@ class ImageRectangle:
         self.w = w
         self.h = h
 
-wind_direction_rectangle = ImageRectangle(578, 87, 60, 13)
 
 def UrlToImage(url):
     resp = urllib.request.urlopen(url)
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
+def CropImage(img, rect):
+    return img[rect.y:rect.y+rect.h, rect.x:rect.x+rect.w]
+
 def GetWindDirection(radar_img):
-    wind_dir_text_image = radar_img[wind_direction_rectangle.y:wind_direction_rectangle.y+wind_direction_rectangle.h, wind_direction_rectangle.x:wind_direction_rectangle.x+wind_direction_rectangle.w]
-    direction_recognized_str = image_to_string(wind_dir_text_image, lang='eng', config='--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789HO')
-    if(direction_recognized_str == "HO"):
+    rect = ImageRectangle(578, 87, 60, 13)
+    cropped_img = CropImage(radar_img, rect)
+    recognized_str = image_to_string(cropped_img, lang='eng', config='--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789HO')
+    if(recognized_str == "HO" or recognized_str == "" ):
         return "Wind direction is undefined."
     else:
-        return "Wind direction is {} degrees (to north direction) .".format(direction_recognized_str)
+        return "Wind direction is {} degrees (to north direction) .".format(recognized_str)
+
+def GetWindSpeed(radar_img):
+    rect = ImageRectangle(585, 101, 50, 13)
+    cropped_img = CropImage(radar_img, rect)
+
+    recognized_str = image_to_string(cropped_img, lang='eng', config='--psm 13 --oem 3 -c tessedit_char_whitelist=0123456789HO')
+    if(recognized_str == "HO" or recognized_str == "" ):
+        return "Wind speed is undefined."
+    else:
+        return "Wind speed is {} kmph .".format(recognized_str)
 
 if __name__ == '__main__':
     img = UrlToImage(radar_image_url)
     print(GetWindDirection(img))
+    print(GetWindSpeed(img))
