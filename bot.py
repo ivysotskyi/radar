@@ -57,6 +57,7 @@ def photo_handler(bot, update):
         wind_dir = radarcheck.GetWindDirection(img)
         wind_speed = radarcheck.GetWindSpeed(img)
         reply = "{}\n{}".format(wind_dir, wind_speed)
+        logger.info("Reply:\n{}".format(reply)
         update.message.reply_text(reply)
     else:
         update.message.reply_text("Expected image size is 654x479")
