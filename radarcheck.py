@@ -30,7 +30,7 @@ def RecognizeNumberStr(img):
     return image_to_string(img, lang='eng', config='--psm 7 --oem 3 -c tessedit_char_whitelist=0123456789HO')
 
 
-def RecognizedNumberUndefined(str):
+def RecognizedNumberUndefined(recognized_str):
     if(recognized_str == "" or 'H' in recognized_str):
         return true
     return false
