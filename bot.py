@@ -29,7 +29,7 @@ else:
 
 def start_handler(bot, update):
     logger.info("User {} started bot".format(update.effective_user["id"]))
-    update.message.reply_text("Hello from Python!\nPress /random to get random number. Press /wind_direction to get direction of a wind now in Kyiv")
+    update.message.reply_text("Search 'ukbb radar' images in google and send me snapshots of the radar. I will read from image and tell you the direction and speed of the wind")
 
 
 def random_handler(bot, update):
