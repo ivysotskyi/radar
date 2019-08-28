@@ -43,13 +43,21 @@ def wind_direction_handler(bot, update):
     wind_dir = radarcheck.GetWindDirection(image)
     logger.info("User {} wind direction {}".format(update.effective_user["id"], wind_dir))
     update.message.reply_text(wind_dir);
-    #update.message.reply_photo(photo=radarcheck.radar_image_url)
 
 
 def photo_handler(bot, update):
-    url = update.message.photo[-1].get_file().file_path
-    img = radarcheck.UrlToImage(url)
-    update.message.reply_text("{}\n\n{}".format(radarcheck.GetWindDirection(img), radarcheck.GetWindSpeed(img)))
+    telegram_file = update.message.photo[-1]
+    logger.info("User {} sent photo".format(update.effective_user["id"]))
+    if telegram_file.width == 654 and telegram_file.height == 479:
+        url = telegram_file.get_file().file_path
+        img = radarcheck.UrlToImage(url)
+        wind_dir = radarcheck.GetWindDirection(img)
+        wind_speed = radarcheck.GetWindSpeed(img)
+        reply = "{}\n{}".format(wind_dir, wind_speed)
+        update.message.reply_text(reply)
+    else:
+        update.message.reply_text("Expected image size is 654x479")
+        logger.info("Unexpected photo size: {} x {}".format(telegram_file.width, telegram_file.height))
 
 if __name__ == '__main__':
     logger.info("Starting bot")
