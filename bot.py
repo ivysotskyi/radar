@@ -57,11 +57,15 @@ def photo_handler(bot, update):
         wind_dir = radarcheck.GetWindDirection(img)
         wind_speed = radarcheck.GetWindSpeed(img)
         reply = "{}\n{}".format(wind_dir, wind_speed)
-        logger.info("Reply:\n{}".format(reply)
+        logger.info("Reply:\n{}".format(reply))
         update.message.reply_text(reply)
     else:
         update.message.reply_text("Expected image size is 654x479")
         logger.info("Unexpected photo size: {} x {}".format(telegram_file.width, telegram_file.height))
+
+def text_handler(bot, update):
+    logger.info("User {} sends text:\n\n{}".format(update.effective_user["id"], update.message))
+
 
 if __name__ == '__main__':
     logger.info("Starting bot")
@@ -71,5 +75,6 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler("start", start_handler))
     updater.dispatcher.add_handler(CommandHandler("random", random_handler))
     updater.dispatcher.add_handler(MessageHandler(Filters.photo, photo_handler))
+    updater.dispatcher.add_handler(MessageHandler(Filters.text, text_handler))
 
     run(updater)
