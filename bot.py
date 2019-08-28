@@ -64,7 +64,7 @@ def photo_handler(bot, update):
         logger.info("Unexpected photo size: {} x {}".format(telegram_file.width, telegram_file.height))
 
 def text_handler(bot, update):
-    logger.info("User {} sends text:\n\n{}".format(update.effective_user["id"], update.message))
+    logger.info("User {} sends text:\n\n{}".format(update.effective_user["id"], update.message.text))
 
 
 if __name__ == '__main__':
