@@ -6,6 +6,7 @@ import config
 import radarcheck
 from PIL import Image
 import cv2
+from time import sleep
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -46,6 +47,8 @@ def wind_direction_handler(bot, update):
 
 
 def photo_handler(bot, update):
+    bot.send_chat_action(chat_id=update.effective_message.chat_id, action=ChatAction.TYPING)
+    sleep(0.5)
     telegram_file = update.message.photo[-1]
     logger.info("User {} sent photo".format(update.effective_user["id"]))
     if telegram_file.width == 654 and telegram_file.height == 479:
