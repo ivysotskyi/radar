@@ -2,6 +2,8 @@ import logging
 import random
 import sys
 import config
+import radarcheck
+from PIL import Image
 
 from telegram.ext import Updater, CommandHandler
 
@@ -25,7 +27,7 @@ else:
 
 def start_handler(bot, update):
     logger.info("User {} started bot".format(update.effective_user["id"]))
-    update.message.reply_text("Hello from Python!\nPress /random to get random number")
+    update.message.reply_text("Hello from Python!\nPress /random to get random number. Press /wind_direction to get direction of a wind now in Kyiv")
 
 
 def random_handler(bot, update):
@@ -34,10 +36,18 @@ def random_handler(bot, update):
     update.message.reply_text("Random number: {}".format(number))
 
 
+def wind_direction_handler(bot, update):
+    image = radarcheck.UrlToImage(radarcheck.radar_image_url)
+    wind_dir = radarcheck.GetWindDirection(image)
+    logger.info("User {} wind direction {}".format(update.effective_user["id"], wind_dir))
+    update.message.reply_text(wind_dir);
+    update.message.reply_photo(photo=radarcheck.radar_image_url)
+
 if __name__ == '__main__':
     logger.info("Starting bot")
     updater = Updater(config.TOKEN)
 
+    updater.dispatcher.add_handler(CommandHandler("wind_direction", wind_direction_handler))
     updater.dispatcher.add_handler(CommandHandler("start", start_handler))
     updater.dispatcher.add_handler(CommandHandler("random", random_handler))
 
